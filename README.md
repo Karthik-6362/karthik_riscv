@@ -4,6 +4,7 @@
 
 <details>
   <summary>Combinational logic in TL-Verilog using Makerchip:- </summary>
+
 BASIC LOGIC GATES :- 
 ![BASIC GATES](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/a1188279-9c8a-4b6c-89be-33b8f568f561)
 
