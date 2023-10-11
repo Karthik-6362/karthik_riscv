@@ -29,6 +29,7 @@ CHAINING TERNARY OPERATOR:-
 
 Mux with a 3 bit select input:- 
 ![Chaining ternary operator](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/d7115cca-3a5f-4887-be1f-13a99e4c525d)
+
 Equivalent realization:- 
 ![Chaining ternary operator equivalent](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/1c2a113e-bf5d-4ac2-be0b-f5604f9d2d8c)
 
