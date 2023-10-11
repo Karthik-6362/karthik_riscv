@@ -47,10 +47,87 @@ assign f =
 ```
 
 INTRODUCTION TO MAKERCHIP:- 
+Makerchip IDE is a web-based integrated development environment used for digital system and chip design, supporting SystemVerilog, code editing, simulation, debugging, and it's widely used in education and FPGA design.
+[Makerchip IDE](https://makerchip.com/sandbox/)
+LABS FOR COMBINATIONAL LOGIC :- 
+
+Getting familiar with Makerchip:- 
+1. Reproduce this screenshot:
+2. Open “Tutorials” “Validity Tutorial”.
+3. In tutorial, click ```Load pythagorean example```
+4. Split panes and move tabs.
+5. Zoom/pan in Diagram w/ mouse wheel and drag.
+6. Zoom Waveform w/ “Zoom In” button.
+7. Click $bb_sq to highlight.
+![USING MAKERCHIP ](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/5a4497cb-2764-430c-9dad-7271b946840a)
+
+
+A) Inverter :-
+
+``` tlv
+\m5_TLV_version 1d: tl-x.org
+\m5
+   
+   // =================================================
+   // Welcome!  New to Makerchip? Try the "Learn" menu.
+   // =================================================
+   
+   //use(m5-1.0)   /// uncomment to use M5 macro library.
+\SV
+   // Macro providing required top-level module definition, random
+   // stimulus support, and Verilator config.
+   m5_makerchip_module   // (Expanded in Nav-TLV pane.)
+\TLV
+   $reset = *reset;
+   
+   $out = ! $in1;
+   
+   // Assert these to end simulation (before Makerchip cycle limit).
+   *passed = *cyc_cnt > 40;
+   *failed = 1'b0;
+\SV
+   endmodule
+```
+Execution in makerchip:- 
+![Inverter in makerchip](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/bb09ba96-fb84-4eb3-b269-af99cb0cd0a3)
+
+NOTE:-
+- There was no need to declare $out and $in1 (unlike Verilog).
+- There was no need to assign $in1. Random stimulus is provided, and a warning is produced.
+
+B) Or gate :- 
+``` tlv
+\m5_TLV_version 1d: tl-x.org
+\m5
+   
+   // =================================================
+   // Welcome!  New to Makerchip? Try the "Learn" menu.
+   // =================================================
+   
+   //use(m5-1.0)   /// uncomment to use M5 macro library.
+\SV
+   // Macro providing required top-level module definition, random
+   // stimulus support, and Verilator config.
+   m5_makerchip_module   // (Expanded in Nav-TLV pane.)
+\TLV
+   $reset = *reset;
+   
+   $out = $in1 | $in2;
+   
+   // Assert these to end simulation (before Makerchip cycle limit).
+   *passed = *cyc_cnt > 40;
+   *failed = 1'b0;
+\SV
+   endmodule
 
 ```
-makerchip.com
-```
+
+Execution in makerchip:- 
+![or in makerchip](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/bb2b762f-de42-4bfc-a109-7fc01e185f66)
+
+
+
+
 
 
 </details>
