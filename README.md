@@ -33,7 +33,7 @@ Mux with a 3 bit select input:-
 Equivalent realization:- 
 ![Chaining ternary operator equivalent](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/1c2a113e-bf5d-4ac2-be0b-f5604f9d2d8c)
 
-```verilog
+```tlverilog
 assign f =
   sel[0]
     ? a
@@ -64,19 +64,7 @@ Getting familiar with Makerchip:-
 
 A) Inverter :-
 
-``` tlv
-\m5_TLV_version 1d: tl-x.org
-\m5
-   
-   // =================================================
-   // Welcome!  New to Makerchip? Try the "Learn" menu.
-   // =================================================
-   
-   //use(m5-1.0)   /// uncomment to use M5 macro library.
-\SV
-   // Macro providing required top-level module definition, random
-   // stimulus support, and Verilator config.
-   m5_makerchip_module   // (Expanded in Nav-TLV pane.)
+``` tlverilog
 \TLV
    $reset = *reset;
    
@@ -96,19 +84,7 @@ NOTE:-
 - There was no need to assign $in1. Random stimulus is provided, and a warning is produced.
 
 B) Or gate :- 
-``` tlv
-\m5_TLV_version 1d: tl-x.org
-\m5
-   
-   // =================================================
-   // Welcome!  New to Makerchip? Try the "Learn" menu.
-   // =================================================
-   
-   //use(m5-1.0)   /// uncomment to use M5 macro library.
-\SV
-   // Macro providing required top-level module definition, random
-   // stimulus support, and Verilator config.
-   m5_makerchip_module   // (Expanded in Nav-TLV pane.)
+``` tlverilog
 \TLV
    $reset = *reset;
    
@@ -128,19 +104,7 @@ Execution in makerchip:-
 
 C) Explicitly adding the only 4 bits of the inputs using + :- 
 
-``` tlv
-\m5_TLV_version 1d: tl-x.org
-\m5
-   
-   // =================================================
-   // Welcome!  New to Makerchip? Try the "Learn" menu.
-   // =================================================
-   
-   //use(m5-1.0)   /// uncomment to use M5 macro library.
-\SV
-   // Macro providing required top-level module definition, random
-   // stimulus support, and Verilator config.
-   m5_makerchip_module   // (Expanded in Nav-TLV pane.)
+``` tlverilog
 \TLV
    $reset = *reset;
    
@@ -157,19 +121,7 @@ Execution in makerchip:-
 
 
 D) Mux with 1-bit inputs:-
-```tlv
-\m5_TLV_version 1d: tl-x.org
-\m5
-   
-   // =================================================
-   // Welcome!  New to Makerchip? Try the "Learn" menu.
-   // =================================================
-   
-   //use(m5-1.0)   /// uncomment to use M5 macro library.
-\SV
-   // Macro providing required top-level module definition, random
-   // stimulus support, and Verilator config.
-   m5_makerchip_module   // (Expanded in Nav-TLV pane.)
+```tlverilog
 \TLV
    $reset = *reset;
    
@@ -186,19 +138,7 @@ Execution in makerchip:-
 
 
 E) Mux with 8-bit inputs:- 
-```tlv
-\m5_TLV_version 1d: tl-x.org
-\m5
-   
-   // =================================================
-   // Welcome!  New to Makerchip? Try the "Learn" menu.
-   // =================================================
-   
-   //use(m5-1.0)   /// uncomment to use M5 macro library.
-\SV
-   // Macro providing required top-level module definition, random
-   // stimulus support, and Verilator config.
-   m5_makerchip_module   // (Expanded in Nav-TLV pane.)
+```tlverilog
 \TLV
    $reset = *reset;
    
@@ -212,8 +152,77 @@ E) Mux with 8-bit inputs:-
 Execution in makerchip:- 
 ![mux with 8bit ip in makerchip](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/56ab2534-30d4-428b-9306-a785437e7c1c)
 
+</details>
+
+
+<details>
+  <summary> Sequential Logic:- </summary>
+
+## D-Flipflop :- 
+A D flip-flop is a digital circuit element that stores and outputs a binary value (0 or 1) based on the input data (D), a clock signal (clk), and an optional reset signal, allowing the stored value to be changed on the rising or falling edge of the clock and reset to a predefined state when the reset signal is active.
+
+```tlverilog 
+\TLV
+   $reset = *reset;
+   
+   $out = $reset ? 0 : $data_in;
+   
+   // Assert these to end simulation (before Makerchip cycle limit).
+   *passed = *cyc_cnt > 40;
+   *failed = 1'b0;
+\SV
+   endmodule
+```
+Execution in makerchip:-  
+![d flipflop makerchip](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/e7a56bb8-9bc0-4062-bbee-9d3c6b337b67)
+
+## Fibonacci Series:- 
+The Fibonacci series is a sequence of numbers where each number is the sum of the two preceding ones, usually starting with 0 and 1.
+![eg- Fibonacci Series](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/07ddba11-3adf-4cf9-b2f7-4179e5c17a2a)
+
+``` tlverilog
+\TLV
+   $reset = *reset;
+   
+   $num[31:0] = $reset ? 1 : (>>1$num + >>2$num);
+   
+   // Assert these to end simulation (before Makerchip cycle limit).
+   *passed = *cyc_cnt > 40;
+   *failed = 1'b0;
+```
+Execution in makerchip:- 
+![Fibonacci Series makerchip](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/c9616d00-78d8-4164-9b29-7cc52d621658)
+
+
+
+
+
+
+
+
+
+
 
 </details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
