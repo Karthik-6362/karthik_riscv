@@ -1,4 +1,4 @@
-# karthik_riscv
+![image](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/2b13da1f-4aa2-49d6-b6f2-edba0f037cf5)# karthik_riscv
 
 ## Digital Logic with TL-Verilog and Makerchip:- 
 
@@ -326,22 +326,61 @@ Based on the first two letters of the variables:-
 Execution in makerchip:- 
 ![pipeline lab](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/a6d0981d-e677-4cbd-9a5a-9445e3bfe684)
 
+### Counter and Calculator in Pipeline :- 
+```tlverilog
+\TLV
+   
+   |calc
+      @1
+         $reset = *reset;
+         $cnt[1:0] = $reset ? (0) : (>>1$cnt[1:0] + 1) ;
+         
+         $val1[31:0] = >>1$out;
+         $val2[31:0] = $rand1[3:0];
+         $sum = $val1 + $val2;
+         $diff = $val1 - $val2;
+         $prod = $val1 * $val2;
+         $quot = $val1 / $val2;
+         $out = $reset ? ( $op[1]?($op[0] ? $quot : $prod):($op[0] ? $diff : $sum) ) : 0;
+   
+   // $out = op[1]?(op[0] ? $quot : $prod):(op[0] ? $diff : $sum);
+```
 
+Execution in makerchip:- 
+![Counter and Calculator in Pipeline](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/1068289e-5fbe-41c1-b76e-0fb018aaf577)
 
+### Lab: 2-Cycle Calculator :- 
 
+```tlverilog
+\TLV
+   
+   |calc
+      @1
+         $val1[31:0] = >>2$out;
+         $val2[31:0] = $rand1[3:0];
+         $sum[31:0] = $val1[31:0] + $val2[31:0];
+         $diff[31:0] = $val1[31:0] - $val2[31:0];
+         $prod[31:0] = $val1[31:0] * $val2[31:0];
+         $quot[31:0] = $val1[31:0] / $val2[31:0];
+         
 
+      @2
+         $reset = *reset;
+         $valid = $reset ? (0) : (>>1$valid + 1) ;
+         $op[1:0] = $reset | $valid ;
+         $out[32:0] = $op[1] ? ($op[0] ? $quot[31:0] : $prod[31:0]) : ($op[0] ? $diff[31:0] : $sum[31:0]) ;
+   // $out = op[1]?(op[0] ? $quot : $prod):(op[0] ? $diff : $sum);
+   
+   
+   
+   // Assert these to end simulation (before Makerchip cycle limit).
+   *passed = *cyc_cnt > 40;
+   *failed = 1'b0;
 
+```
 
-
-
-
-
-
-
-
-
-
-
+Execution in makerchip:- 
+![Lab 2-Cycle Calculator](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/1e3a9942-ed26-4006-af1e-d2b6d3555c42)
 
 </details>
 
