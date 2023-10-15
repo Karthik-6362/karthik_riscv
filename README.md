@@ -229,7 +229,8 @@ warning)
    *failed = 1'b0;
 ```
 Execution in makerchip:- 
-![Uploading Sequential Calculator.png…]()
+![Sequential Calculator](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/484a78e5-59b1-4009-a20c-90bbd2a7f196)
+
 
 
 
