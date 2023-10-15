@@ -238,7 +238,9 @@ Execution in makerchip:-
 <details>
   <summmary> Pipelined logic :-  </summmary>
 
-A Simple Pipeline Pythagoras's Theorem :- 
+
+A Simple Pipeline Pythagoras's Theorem :-
+
 ![Pythagoras's Theorem](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/7c3e6328-888f-49f2-bb31-36894d25609f)
 
 Logic used:- 
