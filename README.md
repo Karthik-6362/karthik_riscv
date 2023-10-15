@@ -234,19 +234,19 @@ Execution in makerchip:-
 
 </details>
 
-
 <details>
-  <summmary> Pipelined logic :-  </summmary>
-
+  <summary> Pipelined logic :-  </summary>
 
 A Simple Pipeline Pythagoras's Theorem :-
 
 ![Pythagoras's Theorem](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/7c3e6328-888f-49f2-bb31-36894d25609f)
 
 Logic used:- 
+
 ![Pythagoras's Theorem logic](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/736a35c5-068c-4d66-b50c-5289b372670a)
 
 The above logic is distributed into 3 stages:- 
+
 ![Pythagoras's Theorem logic distribution](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/32b635bc-2d60-42cd-9155-52303d69fd1a)
 
 ``` tlverilog
