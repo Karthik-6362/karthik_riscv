@@ -232,13 +232,64 @@ Execution in makerchip:-
 ![Sequential Calculator](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/484a78e5-59b1-4009-a20c-90bbd2a7f196)
 
 
+</details>
+
+
+<details>
+  <summmary> Pipelined logic :-  </summmary>
+
+A Simple Pipeline Pythagoras's Theorem :- 
+![Pythagoras's Theorem](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/7c3e6328-888f-49f2-bb31-36894d25609f)
+
+Logic used:- 
+![Pythagoras's Theorem logic](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/736a35c5-068c-4d66-b50c-5289b372670a)
+
+The above logic is distributed into 3 stages:- 
+![Pythagoras's Theorem logic distribution](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/32b635bc-2d60-42cd-9155-52303d69fd1a)
+
+``` tlverilog
+`include "sqrt32.v";
+|calc\
+      @1
+         $aa_sq[31:0] = $aa * $aa;
+         $bb_sq[31:0] = $bb * $bb;
+         
+      @2
+         $cc_sq[31:0] = $aa_sq + $bb_sq;
+      @3
+         $cc[31:0] = sqrt($cc_sq);
+```
+
+Stage1:- The inputs are squared.
+Stage2:- The squared numbers are added
+Stage3:- Root is taken for the sum.
+
+Execution in makerchip:-
+![Pipelining the Pythagoras's Theorem](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/7d9ccfc7-7f4c-410d-947c-7782eab980aa)
+
+Staging is a physical attribute. No impact to behavior:- 
+![Staging is a physical attribute  No impact to behavior](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/47d7bb31-c16d-4290-8261-06dbd589140b)
+
+- Retiming changes in system verilog is very bug-prone, so it is easy to make these vhanges in tlverilog.
+- In makerchip waveform viewer the output will be captured according to the time, so if there are 3 stages in the logic then the output of the present inputs will be after 2 cycles.
+
+## Pipeline Logic Advantages:-
+- In a non-pipelined system, a single operation may span multiple clock cycles, resulting in a relatively slow completion time. However, by introducing pipelining, the operation is divided into distinct stages, each executed in a single clock cycle. This architectural approach not only speeds up individual stages but also allows for concurrent execution of multiple stages. When pipelining is coupled with a higher clock frequency, it leads to a substantial reduction in the overall time required to finish an operation.
+- Pipelining enables the parallel execution of various stages within an operation. As each stage is designed to be completed swiftly, the entire operation can be processed more efficiently. This enhanced throughput, when combined with an increased clock frequency, results in the ability to handle a greater number of operations within the same unit of time.
+
+## Language syntax of TLVerilog :- 
+
+Type of an identifier determined by symbol prefix and case/delimitation style.
+
+Based on the first two letters of the variables:- 
+- $lower_case: pipe signal
+- $CamelCase: state signal (technically, this is “Pascal case”)
+- $UPPER_CASE: keyword signal
+- >>1: Ahead by 1.
 
 
 
 </details>
-
-
-
 
 
 
