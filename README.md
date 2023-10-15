@@ -287,7 +287,35 @@ Based on the first two letters of the variables:-
 - $lower_case: pipe signal
 - $CamelCase: state signal (technically, this is “Pascal case”)
 - $UPPER_CASE: keyword signal
-- >>1: Ahead by 1.
+- ``` >>1 ``` : Ahead by 1.
+
+
+Lab:- Pipeline 
+``` tlverilog
+\TLV
+   $reset = *reset;
+   
+   |comp
+      @1
+         $err1 = $bad_input | $illegal_op ;
+      @3 
+         $err2 = $overflow | $err1 ;
+      @6
+         $err3 = $err2 || $div_by_zero;
+   
+   
+   
+   
+   // Assert these to end simulation (before Makerchip cycle limit).
+   *passed = *cyc_cnt > 40;
+   *failed = 1'b0;
+\SV
+   endmodule
+```
+
+Execution in makerchip:- 
+![pipeline lab](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/a6d0981d-e677-4cbd-9a5a-9445e3bfe684)
+
 
 
 
