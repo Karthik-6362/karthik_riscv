@@ -193,6 +193,17 @@ The Fibonacci series is a sequence of numbers where each number is the sum of th
 Execution in makerchip:- 
 ![Fibonacci Series makerchip](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/c9616d00-78d8-4164-9b29-7cc52d621658)
 
+## Lab:- Counter 
+
+```tlverilog
+\TLV
+   $reset = *reset;
+   
+   $cnt[1:0] = $reset ? (0) : (>>1$cnt[1:0] + 1) ;
+```
+Execution in makerchip:- 
+![counter](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/0ef32ff0-3620-48f7-8a35-5e4c76cf90b9)
+
 
 ## Representations of constants in verilog:- 
 
@@ -290,7 +301,7 @@ Based on the first two letters of the variables:-
 - ``` >>1 ``` : Ahead by 1.
 
 
-Lab:- Pipeline 
+## Lab:- Pipeline 
 ``` tlverilog
 \TLV
    $reset = *reset;
@@ -312,9 +323,22 @@ Lab:- Pipeline
 \SV
    endmodule
 ```
-
 Execution in makerchip:- 
 ![pipeline lab](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/a6d0981d-e677-4cbd-9a5a-9445e3bfe684)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
