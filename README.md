@@ -1,5 +1,4 @@
-![image](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/2b13da1f-4aa2-49d6-b6f2-edba0f037cf5)# karthik_riscv
-
+## Karthik_riscv
 ## Digital Logic with TL-Verilog and Makerchip:- 
 
 <details>
@@ -388,20 +387,63 @@ Execution in makerchip:-
 <details>
   <summary>Validity :- </summary>
 
+Validity provides:
+- Easier debug
+- Cleaner design
+- Better error checking
+- Automated clock gating
 
 
+## Clock Gating:- 
+- Used to save power while transferring clock.
+- Clock signals are distributed to EVERY flip-flop.
+- Clocks toggle twice per cycle.
+- This consumes power.
+- Clock gating avoids toggling clock signals.
 
+### File structure in makerchip :-
 
+- \m5_TLV_version 1d: tl-x.org :- Version of makerchip being used and tl-x.org contains tyhe documentation
+- m5 :- Macro language used for processsing.
+- m5_makerchip_module :- Expands the inputs and outputs in the NAV file.
+- \sv  :- The system verilog codes.
+- \TLV :- Where tlverilog code is defined.
 
+### Distance Accumulator :- 
 
+- Each valid transaction in the |calc pipeline will represent a valid hop.
+- $aa is the forward-facing distance of the hop, and $bb is the lateral distance, so $cc gives us the distance of a hop.
+- We add to our pipeline an accumulator accumulating the computed $cc values and providing a running total distance
 
+![Distance Accumulator](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/0742436b-0041-4865-8f7c-60305af26e5b)
 
+Implementing in Makerchip :- 
+```tlverilog
+\SV
+`include "sqrt32.v";
 
+\TLV
+   $reset = *reset;
+   
+   |calc
+      @1
+         $reset = *reset ;
+      ?$valid
+         @1
+            $aa_sq[31:0] = $aa * $aa;
+            $bb_sq[31:0] = $bb * $bb;
 
+         @2
+            $cc_sq[31:0] = $aa_sq + $bb_sq;
+         @3
+            $cc[31:0] = sqrt($cc_sq);
+      @4
+         $tot_dst = $reset ? 0 : ($valid ? >>1$tot_dst + $cc : >>1$tot_dst) ;
 
+```
 
-
-
+Execution in makerchip:- 
+![Total Distance (Makerchip walkthrough)](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/9ed4b7a2-75c7-4cfa-a09d-8fa59bb2f5fb)
 
 
 
