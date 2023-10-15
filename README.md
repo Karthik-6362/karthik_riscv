@@ -194,11 +194,42 @@ Execution in makerchip:-
 ![Fibonacci Series makerchip](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/c9616d00-78d8-4164-9b29-7cc52d621658)
 
 
+## Representations of constants in verilog:- 
 
+'0: All 0s (width based on context).
+'X: All DONT-CARE bits.
+16’d5: 16-bit decimal 5.
+5'b00XX1: 5-bit value with DONT-CARE bits.
+1: 32-bit (signed) 1.
 
+Our simulator configuration:
+● will zero-extend or truncate when widths are mismatched (without
+warning)
+● uses 2-state simulation (no X’s)
 
+## Sequential Calculator:- 
 
-
+``` tlverilog 
+\TLV
+   $reset = *reset;
+   
+   $val1[31:0] = >>1$out;
+   $val2[31:0] = $rand1[3:0];
+   $sum = $val1 + $val2;
+   $diff = $val1 - $val2;
+   $prod = $val1 * $val2;
+   $quot = $val1 / $val2;
+   
+   $out = $reset ? ( $op[1]?($op[0] ? $quot : $prod):($op[0] ? $diff : $sum) ) : 0;
+   // $out = op[1]?(op[0] ? $quot : $prod):(op[0] ? $diff : $sum);
+   
+   
+   // Assert these to end simulation (before Makerchip cycle limit).
+   *passed = *cyc_cnt > 40;
+   *failed = 1'b0;
+```
+Execution in makerchip:- 
+![Uploading Sequential Calculator.png…]()
 
 
 
