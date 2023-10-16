@@ -1,4 +1,8 @@
 ## Karthik_riscv
+
+<details>
+  <summary> Digital Logic with TL-Verilog and Makerchip :- </summary>
+  
 ## Digital Logic with TL-Verilog and Makerchip:- 
 
 <details>
@@ -487,8 +491,7 @@ Execution in makerchip :-
 
 
 
-
-
+</details>
 
 
 
