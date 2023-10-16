@@ -496,7 +496,7 @@ Execution in makerchip :-
 
 
 <details>
-<summary>Basic RISC-V CPU micro-architecture :- </summary>
+<summary>DAY_4 Basic RISC-V CPU micro-architecture :- </summary>
 
 <details>
 <summary>Introduction to Simple RISC-V Micro-architecture :- </summary>
