@@ -1,9 +1,9 @@
 ## Karthik_riscv
 
 <details>
-  <summary> Digital Logic with TL-Verilog and Makerchip :- </summary>
+  <summary> DAY_3 :- Digital Logic with TL-Verilog and Makerchip :- </summary>
   
-## Digital Logic with TL-Verilog and Makerchip:- 
+### Digital Logic with TL-Verilog and Makerchip:- 
 
 <details>
   <summary>Combinational logic in TL-Verilog using Makerchip:- </summary>
