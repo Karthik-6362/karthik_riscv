@@ -445,7 +445,31 @@ Implementing in Makerchip :-
 Execution in makerchip:- 
 ![Total Distance (Makerchip walkthrough)](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/9ed4b7a2-75c7-4cfa-a09d-8fa59bb2f5fb)
 
+## Cycle Calculator with Validity :- 
+$valid_or_reset = $valid || $reset; as a when condition for calculation instead of zeroing $out.
 
+``` tlverilog
+\TLV
+   $reset = *reset;
+   |clac  
+      @1
+         $reset = *reset ;
+      ?$valid
+         @1
+            
+            $val1[31:0] = >>2$out[31:0];
+            $sum = $val1 + $val2;
+            $diff = $val1 - $val2;
+            $prod = $val1 * $val2;
+            $quot = $val1 / $val2;
+            $valid = >>1$valid +1 ;
+            $valid_or_reset = $valid || $reset;
+      @2
+         $out[31:0] = $valid_or_reset ? ($op[1]?($op[0] ? $quot : $prod) : ($op[0] ? $diff : $sum) ) : 0 ;
+  
+```
+Execution in makerchip :- 
+![Total Distance (Makerchip walkthrough)](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/bd439527-f529-47f5-8022-95d5b22048e4)
 
 </details>
 
