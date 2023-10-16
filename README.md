@@ -469,7 +469,8 @@ $valid_or_reset = $valid || $reset; as a when condition for calculation instead 
   
 ```
 Execution in makerchip :- 
-![Total Distance (Makerchip walkthrough)](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/bd439527-f529-47f5-8022-95d5b22048e4)
+![Cycle Calculator with Validity](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/a8f098aa-ea3f-475b-8c4a-92accca52323)
+
 
 </details>
 
