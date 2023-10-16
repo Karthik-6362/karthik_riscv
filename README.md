@@ -481,6 +481,33 @@ Execution in makerchip :-
 <details>
   <summary>Day 3 Wrap-up :- </summary>
 
+##  Hierarchy Concept :- 
+
+
+
+
+
+
+</details>
+
+
+
+</details>
+
+
+<details>
+<summary>Basic RISC-V CPU micro-architecture :- </summary>
+
+<details>
+<summary>Introduction to Simple RISC-V Micro-architecture :- </summary>
+
+## RISC-V Block Diagram :- 
+- Instruction Fetch (IF) Unit: This unit fetches instructions from memory.
+- Instruction Decode (ID) Unit: It decodes the fetched instructions and determines the required operations.
+- Execution Unit (EXU): This unit performs the actual execution of instructions, which may include arithmetic, logical, and data manipulation operations.
+- Memory Unit (MEM): The memory unit handles data transfers between the CPU core and memory, including load and store operations.
+- Write-back Unit (WB): This unit handles writing the results back to registers.
+![RISC-V Block Diagram](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/789e8a0e-6efa-4cb2-b3dc-59326cfb6508)
 
 
 
@@ -500,10 +527,9 @@ Execution in makerchip :-
 
 
 
+
+
+
+
 </details>
-
-
-
-
-
 
