@@ -509,14 +509,94 @@ Execution in makerchip :-
 - Write-back Unit (WB): This unit handles writing the results back to registers.
 ![RISC-V Block Diagram](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/789e8a0e-6efa-4cb2-b3dc-59326cfb6508)
 
+### Implementation Plan :- 
+![Implementation Plan](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/3e5a3e82-9393-4a9e-8afe-e72784f338c3)
 
+### Implementation in  makerchip  :- 
+![Implementation in  makerchip](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/3297600d-4b41-4287-8615-e970c550abe7)
 
-
-
+### Visualization:- 
+![Visualization](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/10fc316d-e564-441b-a2c3-99fcdfaaabca)
 
 </details>
 
 
+<details>
+  <summary>Fetch and decode :- </summary>
+
+## Instruction Fetch (IF) Unit :-
+- The IF unit is responsible for fetching instructions from the memory, typically the program memory or instruction cache.
+- During this stage, the IF unit retrieves the instruction at the current program counter (PC) address, increments the PC to point to the next instruction, and passes the fetched instruction to the next stage of the pipeline.
+
+## Instruction Decode (ID) Unit :-
+- The ID unit follows the IF unit in the pipeline and is responsible for decoding the fetched instructions.
+- It determines the required operations based on the instruction's opcode (operation code) and may identify the operands involved in the operation.
+- In the ID stage, the CPU examines the instruction, identifies the operation to be performed (e.g., addition, subtraction, load, store), and may also determine which registers or memory locations are involved in the operation.
+
+### Lab: Next PC :-
+- Reset $pc[31:0] to 0 if previous instruction was a “reset instruction” (>>1$reset).
+- Increment by 1 instruction (32’d4 bytes) thereafter.
+- We’ll add branch later.
+ 
+```
+\TLV
+   $reset = *reset;
+   
+   $pc_out[31:0] = >>1$reset ? (0) : (>>1$pc_prev[31:0] + 32'h4) ;
+```
+![pc next](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/48e417aa-b36b-4473-a5f1-2cf7844adfe5)
+
+
+### Lab: Fetch (part 1) :- 
+-Uncomment //m4+imem(@1), and //m4+cpu_viz(@4) compile, and observe log errors.
+```tlverilog
+\TLV
+   // External to function:
+   m4_asm(ADD, r10, r0, r0)             // Initialize r10 (a0) to 0.
+   // Function:
+   m4_asm(ADD, r14, r10, r0)            // Initialize sum register a4 with 0x0
+   m4_asm(ADDI, r12, r10, 1010)         // Store count of 10 in register a2.
+   m4_asm(ADD, r13, r10, r0)            // Initialize intermediate sum register a3 with 0
+   // Loop:
+   m4_asm(ADD, r14, r13, r14)           // Incremental addition
+   m4_asm(ADDI, r13, r13, 1)            // Increment intermediate register by 1
+   m4_asm(BLT, r13, r12, 1111111111000) // If a3 is less than a2, branch to label named <loop>
+   m4_asm(ADD, r10, r14, r0)            // Store final result to register a0 so that it can be read by main program
+   
+   // Optional:
+   // m4_asm(JAL, r7, 00000000000000000000) // Done. Jump to itself (infinite loop). (Up to 20-bit signed immediate plus implicit 0 bit (unlike JALR) provides byte address; last immediate bit should also be 0)
+   m4_define_hier(['M4_IMEM'], M4_NUM_INSTRS)
+
+   |cpu
+      @0
+         $reset = *reset;
+         
+         $pc[31:0] = >>1$reset ? (0) : (>>1$pc[31:0] + 32'd4) ;
+      @1
+         $imm_rd_en = !$reset;
+         $imm_rd_addr[M4_IMEM_INDEX_CNT-1:0] = $pc[M4_IMEM_INDEX_CNT+1:2];
+         $instr[31:0] = $imem_rd_data[31:0];
+         
+   
+   // Assert these to end simulation (before Makerchip cycle limit).
+   *passed = *cyc_cnt > 40;
+   *failed = 1'b0;
+
+   |cpu
+      m4+imem(@1)    // Args: (read stage)
+      //m4+rf(@1, @1)  // Args: (read stage, write stage) - if equal, no register bypass is required
+      //m4+dmem(@4)    // Args: (read/write stage)
+      //m4+myth_fpga(@0)  // Uncomment to run on fpga
+
+   m4+cpu_viz(@4)    // For visualisation
+```
+![Instruction fetch](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/590ba10a-f389-4000-9734-7311f8ee69bc)
+
+### Lab: Fetch (part 2) :- 
+
+
+
+</details>
 
 
 
