@@ -36,7 +36,7 @@ Mux with a 3 bit select input:-
 Equivalent realization:- 
 ![Chaining ternary operator equivalent](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/1c2a113e-bf5d-4ac2-be0b-f5604f9d2d8c)
 
-```tlverilog
+```TL-Verilog
 assign f =
   sel[0]
     ? a
@@ -67,7 +67,7 @@ Getting familiar with Makerchip:-
 
 A) Inverter :-
 
-``` tlverilog
+```TL-Verilog
 \TLV
    $reset = *reset;
    
@@ -87,7 +87,7 @@ NOTE:-
 - There was no need to assign $in1. Random stimulus is provided, and a warning is produced.
 
 B) Or gate :- 
-``` tlverilog
+```TL-Verilog
 \TLV
    $reset = *reset;
    
@@ -107,7 +107,7 @@ Execution in makerchip:-
 
 C) Explicitly adding the only 4 bits of the inputs using + :- 
 
-``` tlverilog
+```TL-Verilog
 \TLV
    $reset = *reset;
    
@@ -124,7 +124,7 @@ Execution in makerchip:-
 
 
 D) Mux with 1-bit inputs:-
-```tlverilog
+```TL-Verilog
 \TLV
    $reset = *reset;
    
@@ -141,7 +141,7 @@ Execution in makerchip:-
 
 
 E) Mux with 8-bit inputs:- 
-```tlverilog
+```TL-Verilog
 \TLV
    $reset = *reset;
    
@@ -164,7 +164,7 @@ Execution in makerchip:-
 ## D-Flipflop :- 
 A D flip-flop is a digital circuit element that stores and outputs a binary value (0 or 1) based on the input data (D), a clock signal (clk), and an optional reset signal, allowing the stored value to be changed on the rising or falling edge of the clock and reset to a predefined state when the reset signal is active.
 
-```tlverilog 
+```TL-Verilog 
 \TLV
    $reset = *reset;
    
@@ -183,7 +183,7 @@ Execution in makerchip:-
 The Fibonacci series is a sequence of numbers where each number is the sum of the two preceding ones, usually starting with 0 and 1.
 ![eg- Fibonacci Series](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/07ddba11-3adf-4cf9-b2f7-4179e5c17a2a)
 
-``` tlverilog
+```TL-Verilog
 \TLV
    $reset = *reset;
    
@@ -198,7 +198,7 @@ Execution in makerchip:-
 
 ## Lab:- Counter 
 
-```tlverilog
+```TL-Verilog
 \TLV
    $reset = *reset;
    
@@ -223,7 +223,7 @@ warning)
 
 ## Sequential Calculator:- 
 
-``` tlverilog 
+```TL-Verilog 
 \TLV
    $reset = *reset;
    
@@ -263,7 +263,7 @@ The above logic is distributed into 3 stages:-
 
 ![Pythagoras's Theorem logic distribution](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/32b635bc-2d60-42cd-9155-52303d69fd1a)
 
-``` tlverilog
+```TL-Verilog
 `include "sqrt32.v";
 |calc\
       @1
@@ -305,7 +305,7 @@ Based on the first two letters of the variables:-
 
 
 ## Lab:- Pipeline 
-``` tlverilog
+```TL-Verilog
 \TLV
    $reset = *reset;
    
@@ -330,7 +330,7 @@ Execution in makerchip:-
 ![pipeline lab](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/a6d0981d-e677-4cbd-9a5a-9445e3bfe684)
 
 ### Counter and Calculator in Pipeline :- 
-```tlverilog
+```TL-Verilog
 \TLV
    
    |calc
@@ -354,7 +354,7 @@ Execution in makerchip:-
 
 ### Lab: 2-Cycle Calculator :- 
 
-```tlverilog
+```TL-Verilog
 \TLV
    
    |calc
@@ -422,7 +422,7 @@ Validity provides:
 ![Distance Accumulator](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/0742436b-0041-4865-8f7c-60305af26e5b)
 
 Implementing in Makerchip :- 
-```tlverilog
+```TL-Verilog
 \SV
 `include "sqrt32.v";
 
@@ -452,7 +452,7 @@ Execution in makerchip:-
 ## Cycle Calculator with Validity :- 
 $valid_or_reset = $valid || $reset; as a when condition for calculation instead of zeroing $out.
 
-``` tlverilog
+```TL-Verilog
 \TLV
    $reset = *reset;
    |clac  
