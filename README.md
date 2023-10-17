@@ -522,7 +522,7 @@ Execution in makerchip :-
 
 
 <details>
-  <summary>Fetch and decode :- </summary>
+  <summary>Instruction Fetch  :- </summary>
 
 ## Instruction Fetch (IF) Unit :-
 - The IF unit is responsible for fetching instructions from the memory, typically the program memory or instruction cache.
@@ -588,6 +588,10 @@ Execution in makerchip :-
 ```
 ![Instruction fetch](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/590ba10a-f389-4000-9734-7311f8ee69bc)
 
+</details>
+
+<details>
+  <summary>Instruction Decode :- </summary>
 
 
 ## Decode :- 
