@@ -605,7 +605,7 @@ Execution in makerchip :-
 - The opcode fetched from the memory is decoded for the next steps and moved to the appropriate registers.
 - Below image shows hoe decode is determining the TYPE OF RISC V instructions set (Various types of Instructions in RV32 are I, R, S, J, U)
 
-### Instruction Types Decode :- 
+## Instruction Types Decode :- 
 
 ![Instruction Types Decode](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/285a9a64-8e8f-41ef-8887-6e05e0fd0f02)
 
@@ -648,6 +648,8 @@ Execution in makerchip :-
 
 ## Extracting  other instruction fields: $funct7, $funct3, $rs1, $rs2, $rd, $opcode :- 
 
+![Extract other instruction fields](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/57df5eca-c112-4636-8878-718299baaf88)
+
 ```
          $rs2_valid = $is_r_instr || $is_s_instr || $is_b_instr;
          $rs1_valid = $is_r_instr ||  $is_i_instr ||$is_s_instr || $is_b_instr;
@@ -656,18 +658,101 @@ Execution in makerchip :-
          $rd_valid = $is_r_instr || $is_i_instr || $is_u_instr || $is_j_instr;
          $opcode_valid = $is_r_instr || $is_i_instr || $is_s_instr || $is_b_instr || $is_u_instr || $is_j_instr;
 ```
-![Extract other instruction fields](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/57df5eca-c112-4636-8878-718299baaf88)
+
+![Extract other instruction fields Makerchip](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/97ddee6b-7ff2-44c0-aa36-19a17b123988)
 
 
+## Instruction Decode :- 
+![Instruction Decode](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/e4fcdaf8-6a7c-4cfc-9833-588a5d5b57f3)
 
-
+```
+      @1
+         $dec_bits[10:0] = {$funct7[5],$funct3[2:0],$opcode[6:0]};
+         $is_beq = $dec_bits ==? 11'bx_000_1100011;
+         $is_bne = $dec_bits ==? 11'bx_001_1100011;
+         $is_blt = $dec_bits ==? 11'bx_100_1100011;
+         $is_bge = $dec_bits ==? 11'bx_101_1100011;
+         $is_bltu = $dec_bits ==? 11'bx_110_1100011;
+         $is_bgeu = $dec_bits ==? 11'bx_111_1100011;
+         $is_addi = $dec_bits ==? 11'bx_000_0010011;
+         $is_load = $dec_bits ==? 11'bx_000_0000011;
+         //$is_load = $dec_bits ==? 11'bx_001_0000011;
+         //$is_load = $dec_bits ==? 11'bx_010_0000011;
+         //$is_load = $dec_bits ==? 11'bx_100_0000011;
+         //$is_load = $dec_bits ==? 11'bx_100_0000011;
+         $is_lui = $dec_bits ==? 11'bx_xxx_0110111;
+         $is_auipc = $dec_bits ==? 11'bx_xxx_0010111;
+         $is_jal = $dec_bits ==? 11'bx_xxx_1101111;
+         $is_jalr = $dec_bits ==? 11'bx_000_1100111;
+         $is_sb = $dec_bits ==? 11'bx_000_0100011;
+         $is_sh = $dec_bits ==? 11'bx_001_0100011;
+         $is_sw = $dec_bits ==? 11'bx_010_0100011;
+         $is_sltiu = $dec_bits ==? 11'bx_011_0010011;
+         $is_xori = $dec_bits ==? 11'bx_100_0010011;
+         $is_ori = $dec_bits ==? 11'bx_110_0010011;
+         $is_andi = $dec_bits ==? 11'bx_111_0010011;
+         $is_slli = $dec_bits ==? 11'b0_001_0010011;
+         $is_srli = $dec_bits ==? 11'b0_101_0010011;
+         $is_srai = $dec_bits ==? 11'b1_001_0010011;
+         $is_add = $dec_bits ==? 11'b0_000_0110011;
+         $is_sub = $dec_bits ==? 11'b1_000_0110011;
+         $is_sll = $dec_bits ==? 11'b0_001_0110011;
+         $is_slt = $dec_bits ==? 11'b0_010_0110011;
+         $is_sltu = $dec_bits ==? 11'b0_011_0110011;
+         $is_xor = $dec_bits ==? 11'b0_100_0110011;
+         $is_srl = $dec_bits ==? 11'b0_101_0110011;
+         $is_sra = $dec_bits ==? 11'b1_101_0110011;
+         $is_or = $dec_bits ==? 11'b0_110_0110011;
+         $is_and = $dec_bits ==? 11'b0_111_0110011;
+```
+![Instruction Decode Makerchip](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/92883d4b-17ef-4678-80a1-f95d6d40da07)
 
 
 </details>
 
 
 
+<details>
+  <summary>Register File Read :- </summary>
 
+- Register File: This is where the general-purpose registers (GPRs) are stored.
+- RISC-V typically has a small number of registers, often 32, which can be used for storing data and addresses.
+
+![Register File Read](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/68567fb4-aa04-4d20-9c41-e47520bd8279)
+
+```
+      @2 
+         $rf_rd_en1 = $rs1_valid ? $rs1[$rf_rd_index1[4:0]] : 32'b0;
+         $rf_rd_en2 = $rs2_valid ? $rs2[$rf_rd_index2[4:0]] : 32'b0;
+         
+         //$rf_rd_en1 = $rs1_valid ? $rs1[$rf_rd_index1[4:0]] : 32'b0;
+         //$rf_rd_en2 = $rs2_valid ? $rs2[$rf_rd_index2[4:0]] : 32'b0;
+```
+![Register File Read Makerchip ](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/c8505adf-2537-4f7f-a453-993178fbeefd)
+
+## Register File Read (part 2) :- 
+- Assign $src1/2_value[31:0] to register file outputs.
+```
+         //$src1_value[31:0] =  $rf_rd_data1;
+         //$src2_value[31:0] =  $rf_rd_data2;
+         $src1_value[31:0] = >>2$rf_wr_en && ($rd == $rs1) ? >>1$result : $rf_rd_data1;
+         $src2_value[31:0] = >>2$rf_wr_en && ($rd == $rs2) ? >>1$result : $rf_rd_data2; 
+```
+![Register File Read (part 2) Makerchip](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/4b3dc76e-8bb1-479e-bbb3-a37a53aed763)
+
+
+</details>
+
+<details>
+  <summary>ALU ( arithmetic-logic unit)</summary>
+
+- An arithmetic-logic unit (ALU) is the part of the CPU that carries out arithmetic and logic operations.
+- Below image shows an ADDI (ADD Immediate) instruction computation.
+
+
+
+
+</details>
 
 
 
