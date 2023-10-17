@@ -528,10 +528,6 @@ Execution in makerchip :-
 - The IF unit is responsible for fetching instructions from the memory, typically the program memory or instruction cache.
 - During this stage, the IF unit retrieves the instruction at the current program counter (PC) address, increments the PC to point to the next instruction, and passes the fetched instruction to the next stage of the pipeline.
 
-## Instruction Decode (ID) Unit :-
-- The ID unit follows the IF unit in the pipeline and is responsible for decoding the fetched instructions.
-- It determines the required operations based on the instruction's opcode (operation code) and may identify the operands involved in the operation.
-- In the ID stage, the CPU examines the instruction, identifies the operation to be performed (e.g., addition, subtraction, load, store), and may also determine which registers or memory locations are involved in the operation.
 
 ### Lab: Next PC :-
 - Reset $pc[31:0] to 0 if previous instruction was a “reset instruction” (>>1$reset).
@@ -547,7 +543,7 @@ Execution in makerchip :-
 ![pc next](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/48e417aa-b36b-4473-a5f1-2cf7844adfe5)
 
 
-### Lab: Fetch (part 1) :- 
+### Lab: Fetch :- 
 -Uncomment //m4+imem(@1), and //m4+cpu_viz(@4) compile, and observe log errors.
 ```tlverilog
 \TLV
@@ -592,7 +588,74 @@ Execution in makerchip :-
 ```
 ![Instruction fetch](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/590ba10a-f389-4000-9734-7311f8ee69bc)
 
-### Lab: Fetch (part 2) :- 
+
+
+## Decode :- 
+
+- The ID unit follows the IF unit in the pipeline and is responsible for decoding the fetched instructions.
+- It determines the required operations based on the instruction's opcode (operation code) and may identify the operands involved in the operation.
+- In the ID stage, the CPU examines the instruction, identifies the operation to be performed (e.g., addition, subtraction, load, store), and may also determine which registers or memory locations are involved in the operation.
+
+![Decode](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/a2ce825d-a694-49d3-a32f-307691692e86)
+
+- The opcode fetched from the memory is decoded for the next steps and moved to the appropriate registers.
+- Below image shows hoe decode is determining the TYPE OF RISC V instructions set (Various types of Instructions in RV32 are I, R, S, J, U)
+
+### Instruction Types Decode :- 
+
+![Instruction Types Decode](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/285a9a64-8e8f-41ef-8887-6e05e0fd0f02)
+
+``` tlverilog
+@1 
+         //$pc[31:0] = >>1$reset ? 32'b0 : >>1$taken_br ? >>1$br_tgt_pc : >>1$pc + 32'd4;
+         $imem_rd_en = !$reset;
+         $instr[31:0] = $imem_rd_data[31:0];
+         //$instr[31:0] =  $imem_rd_en ? 32'b0 : >>1$imem_rd_data[$imem_rd_addr];
+         $imem_rd_addr[3-1:0] = $pc[3+1:2];
+         
+         $is_i_instr = $instr[6:2] ==? 5'b0000x ||
+                       $instr[6:2] ==? 5'b001x0 ||
+                       $instr[6:2] ==? 5'bxx001;
+         $is_s_instr = $instr[6:2] ==? 5'b0100x;
+         $is_r_instr = $instr[6:2] ==? 5'b01xxx ||
+                       $instr[6:2] ==? 5'b011x0 ||
+                       $instr[6:2] ==? 5'bxx100;
+         $is_u_instr = $instr[6:2] ==? 5'b0x101;
+         $is_b_instr = $instr[6:2] ==? 5'b11000;
+         $is_j_instr = $instr[6:2] ==? 5'b11011;
+```
+
+![Instruction Decode](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/09d88c63-99bf-432b-9a18-427fff53222c)
+
+
+## Instruction Immediate Decode :- 
+![Instruction Immediate Decode](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/cdf7f0ee-818a-4526-a485-f5406f7e31ef)
+
+```
+         $imm[31:0] = $is_i_instr ? { {21{$instr[31]}}, $instr[30:20] } 
+                                  : $is_s_instr ? {{21{$instr[31]}}, $instr[30:25],$instr[11:7]} 
+                                  : $is_b_instr ? { {19{$instr[31]}} , $inst[7] , $instr[30:25] , $instr[11:8] ,1'b0}
+                                  : $is_u_instr ? { $instr[31] , $instr[30:12], 12'b0 }
+                                  : { {12{$instr[31]}} , $instr[20], $instr[30:25], $instr[24:21] ,1'b0 };
+         
+```
+
+![Instruction Immediate Decode makerchip](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/60f9f68f-3fd1-44d7-be10-016b1dc10678)
+
+## Extracting  other instruction fields: $funct7, $funct3, $rs1, $rs2, $rd, $opcode :- 
+
+```
+         $rs2_valid = $is_r_instr || $is_s_instr || $is_b_instr;
+         $rs1_valid = $is_r_instr ||  $is_i_instr ||$is_s_instr || $is_b_instr;
+         $func3_valid = $is_r_instr || $is_i_instr || $is_s_instr || $is_b_instr;
+         $func7_valid = $is_r_instr;
+         $rd_valid = $is_r_instr || $is_i_instr || $is_u_instr || $is_j_instr;
+         $opcode_valid = $is_r_instr || $is_i_instr || $is_s_instr || $is_b_instr || $is_u_instr || $is_j_instr;
+```
+![Extract other instruction fields](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/57df5eca-c112-4636-8878-718299baaf88)
+
+
+
 
 
 
