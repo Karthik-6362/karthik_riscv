@@ -872,7 +872,18 @@ Execution in makerchip :-
 
 </details>
 
+<details>
+  <summary>Lab: Testbench :- </summary>
 
+```
+   *passed = |cpu/xreg[17]>>5$value == (1+2+3+4+5+6+7+8+9);
+```
+Simulation PASSED!!!
+![Simulation PASSED!!!](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/e87f282f-0304-4806-b50a-ae6c3b9298a5)
+
+ 
+
+</details>
 
 
 
