@@ -1055,6 +1055,11 @@ Pipelining helps improve the operating frequency by breaking down the micro-arch
 <details>
   <summary>Load/Store Instructions and Completing RISC-V CPU :- </summary>
 
+- Redirect Loads
+- Data From Memory to Register File
+- Instantiate Data Memory to CPU
+- Completing Jump Instructions
+
 1. Uncomment //m4+dmem(@4).
 2. Connect interface signals above using address bits [5:2] to perform load and
 store (when valid).
