@@ -912,10 +912,19 @@ Waterfall Diagram & Hazards :-
 
 </details>
 
+<details>
+  <summary>Solutions to Pipeline Hazards :- </summary>
 
 Pipelining the CPU
 The above single stage Core was enhanced to be staged across 3 stages in a pipeline, Final output where the core is computing Sum of 9 number. Converting non-pipelined CPU to pipelined CPU using timing abstract feature of TL-Verilog. This allows easy retiming wihtout any risk of funcational bugs. More details reagrding Timing Abstract in TL-Verilog can be found in IEEE Paper "Timing-Abstract Circuit Design in Transaction-Level Verilog" by Steven Hoover.
 
+Pipelining helps improve the operating frequency by breaking down the micro-arch ito substages that consume lesser time.But this process intriduces some hazards and dependencies such as
+- Data Hazards
+- Structural Hazards
+- Control Hazards
+- Name Dependence
+- Anti Dependence
+- Output Dependence
 ```
 |<pipe-name>
    @<pipe stage>
@@ -928,11 +937,140 @@ The above single stage Core was enhanced to be staged across 3 stages in a pipel
 *passed = |cpu/xreg[17]>>5$value == (1+2+3+4+5+6+7+8+9);
 ```
 
-  
-  
+
+- Register file bypass
+![Register file bypass](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/2c3e75ab-097c-4098-a9bb-73b8df78f7c1)
+
+- Correct the branch target path :-
+```
+         $br_tgt_pc = 1>>$pc + $imm; 
+         $valid_taken_br = $valid && $taken_br;
+         $valid_load = $valid && $is_load;
+         //$valid_jump = &valid && $imm;
+```
+![Correct the branch target path](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/59a2ddec-589e-47c2-9ae7-781d4b1d35ff)
+
+- Complete Instruction Decode :-
+```
+         $dec_bits[10:0] = {$funct7[5],$funct3[2:0],$opcode[6:0]};
+         $is_beq = $dec_bits ==? 11'bx_000_1100011;
+         $is_bne = $dec_bits ==? 11'bx_001_1100011;
+         $is_blt = $dec_bits ==? 11'bx_100_1100011;
+         $is_bge = $dec_bits ==? 11'bx_101_1100011;
+         $is_bltu = $dec_bits ==? 11'bx_110_1100011;
+         $is_bgeu = $dec_bits ==? 11'bx_111_1100011;
+         $is_addi = $dec_bits ==? 11'bx_000_0010011;
+         $is_load = $dec_bits ==? 11'bx_000_0000011;
+         //$is_load = $dec_bits ==? 11'bx_001_0000011;
+         //$is_load = $dec_bits ==? 11'bx_010_0000011;
+         //$is_load = $dec_bits ==? 11'bx_100_0000011;
+         //$is_load = $dec_bits ==? 11'bx_100_0000011;
+         $is_lui = $dec_bits ==? 11'bx_xxx_0110111;
+         $is_auipc = $dec_bits ==? 11'bx_xxx_0010111;
+         $is_jal = $dec_bits ==? 11'bx_xxx_1101111;
+         $is_jalr = $dec_bits ==? 11'bx_000_1100111;
+         $is_sb = $dec_bits ==? 11'bx_000_0100011;
+         $is_sh = $dec_bits ==? 11'bx_001_0100011;
+         $is_sw = $dec_bits ==? 11'bx_010_0100011;
+         $is_sltiu = $dec_bits ==? 11'bx_011_0010011;
+         $is_xori = $dec_bits ==? 11'bx_100_0010011;
+         $is_ori = $dec_bits ==? 11'bx_110_0010011;
+         $is_andi = $dec_bits ==? 11'bx_111_0010011;
+         $is_slli = $dec_bits ==? 11'b0_001_0010011;
+         $is_srli = $dec_bits ==? 11'b0_101_0010011;
+         $is_srai = $dec_bits ==? 11'b1_001_0010011;
+         $is_add = $dec_bits ==? 11'b0_000_0110011;
+         $is_sub = $dec_bits ==? 11'b1_000_0110011;
+         $is_sll = $dec_bits ==? 11'b0_001_0110011;
+         $is_slt = $dec_bits ==? 11'b0_010_0110011;
+         $is_sltu = $dec_bits ==? 11'b0_011_0110011;
+         $is_xor = $dec_bits ==? 11'b0_100_0110011;
+         $is_srl = $dec_bits ==? 11'b0_101_0110011;
+         $is_sra = $dec_bits ==? 11'b1_101_0110011;
+         $is_or = $dec_bits ==? 11'b0_110_0110011;
+         $is_and = $dec_bits ==? 11'b0_111_0110011;
+```
+![Complete Instruction Decode](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/5173c48f-3806-43a2-8b8f-e397df8b3632)
+
+- Complete ALU :-
+```
+ //ALU Implmentation - ADD , ADDI , SUB, OR , AND, XOR PLUS IMMEDIATE
+         $result[31:0] = $is_add ?
+                         $src1_value[31:0] + $src2_value[31:0] :
+                         $is_sub ?
+                         $src1_value[31:0] - $src2_value[31:0] :
+                         $is_and ?
+                         $src1_value[31:0] & $src2_value[31:0] :
+                         $is_or ?
+                         $src1_value[31:0] | $src2_value[31:0] :
+                         $is_xor ?
+                         $src1_value[31:0] ^ $src2_value[31:0] :
+                         $is_addi ? 
+                         $src1_value[31:0] + $imm[31:0] :
+                         $is_andi ?
+                         $src1_value[31:0] & $imm[31:0] :
+                         $is_ori ?
+                         $src1_value[31:0] | $imm[31:0] :
+                         $is_xori ?
+                         $src1_value[31:0] ^ $imm[31:0] :
+                         //LOAD AND STORE COMPUTATION
+                         $is_load ?
+                         $src1_value[31:0] + $imm[31:0] :
+                         $is_s_instr ?
+                         $src1_value[31:0] + $imm[31:0] :
+                         //ALU FOR MISCELLANEOUS OPERATIONS SHIFT OPERATIONS
+                         $is_slli ?
+                         $src1_value[31:0] << $imm[5:0] :
+                         $is_srli ?
+                         $src1_value[31:0] >> $imm[5:0] :
+                         $is_sll ?
+                         $src1_value[31:0] << $src2_value[4:0] :
+                         $is_srl ?
+                         $src1_value[31:0] >> $src2_value[4:0] :
+                         //ALU FOR MISCELLANEOUS OPERATIONS
+                         $is_sltu ? $sltu_rslt :
+                         $is_sltiu ? $sltiu_rslt :
+                         $is_lui ?
+                         {$imm[31:12], 12'b0} :
+                         $is_auipc ?
+                         $pc + $imm :
+                         $is_jal ?
+                         $pc + 32'd4 :
+                         $is_jalr ?
+                         $pc + 32'd4 :
+                         $is_srai ?
+                         { {32{$src1_value[31]}}, $src1_value} >> $imm[4:0] :
+                         $is_slt ?
+                         ($src1_value[31] == $src2_value[31]) ? $sltu_rslt : {31'b0, $src1_value[31]} :
+                         $is_slti ?
+                         ($src1_value[31] == $imm[31]) ? $sltu_rslt : {31'b0, $src1_value[31]} :
+                         $is_sra ?
+                         { {32{$src1_value[31]}}, $src1_value} >> $src2_value[4:0] :
+                         32'bx;
+```
   
 </details>
 
+
+<details>
+  <summary>Load/Store Instructions and Completing RISC-V CPU :- </summary>
+
+1. Uncomment //m4+dmem(@4).
+2. Connect interface signals above using address bits [5:2] to perform load and
+store (when valid).
+
+```
+m4_asm(SW, r0, r10, 10000)
+m4_asm(LW, r17, r0, 10000)
+```
+![Load Store Instructions and Completing RISC-V CPU](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/352bd6b0-5cbe-452d-ad55-6dacf2dabc96)
+
+
+
+
+
+
+</details>
 
 
 
