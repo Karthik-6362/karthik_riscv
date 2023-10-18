@@ -748,15 +748,129 @@ Execution in makerchip :-
 
 - An arithmetic-logic unit (ALU) is the part of the CPU that carries out arithmetic and logic operations.
 - Below image shows an ADDI (ADD Immediate) instruction computation.
+![ALU](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/3f8bebed-eeb4-494f-919e-281221759e46)
+```
+         //ALU Implmentation - ADD , ADDI , SUB, OR , AND, XOR PLUS IMMEDIATE
+         $result[31:0] = $is_add ?
+                         $src1_value[31:0] + $src2_value[31:0] :
+                         $is_sub ?
+                         $src1_value[31:0] - $src2_value[31:0] :
+                         $is_and ?
+                         $src1_value[31:0] & $src2_value[31:0] :
+                         $is_or ?
+                         $src1_value[31:0] | $src2_value[31:0] :
+                         $is_xor ?
+                         $src1_value[31:0] ^ $src2_value[31:0] :
+                         $is_addi ? 
+                         $src1_value[31:0] + $imm[31:0] :
+                         $is_andi ?
+                         $src1_value[31:0] & $imm[31:0] :
+                         $is_ori ?
+                         $src1_value[31:0] | $imm[31:0] :
+                         $is_xori ?
+                         $src1_value[31:0] ^ $imm[31:0] :
+                         //LOAD AND STORE COMPUTATION
+                         $is_load ?
+                         $src1_value[31:0] + $imm[31:0] :
+                         $is_s_instr ?
+                         $src1_value[31:0] + $imm[31:0] :
+                         //ALU FOR MISCELLANEOUS OPERATIONS SHIFT OPERATIONS
+                         $is_slli ?
+                         $src1_value[31:0] << $imm[5:0] :
+                         $is_srli ?
+                         $src1_value[31:0] >> $imm[5:0] :
+                         $is_sll ?
+                         $src1_value[31:0] << $src2_value[4:0] :
+                         $is_srl ?
+                         $src1_value[31:0] >> $src2_value[4:0] :
+                         //ALU FOR MISCELLANEOUS OPERATIONS
+                         $is_sltu ? $sltu_rslt :
+                         $is_sltiu ? $sltiu_rslt :
+                         $is_lui ?
+                         {$imm[31:12], 12'b0} :
+                         $is_auipc ?
+                         $pc + $imm :
+                         $is_jal ?
+                         $pc + 32'd4 :
+                         $is_jalr ?
+                         $pc + 32'd4 :
+                         $is_srai ?
+                         { {32{$src1_value[31]}}, $src1_value} >> $imm[4:0] :
+                         $is_slt ?
+                         ($src1_value[31] == $src2_value[31]) ? $sltu_rslt : {31'b0, $src1_value[31]} :
+                         $is_slti ?
+                         ($src1_value[31] == $imm[31]) ? $sltu_rslt : {31'b0, $src1_value[31]} :
+                         $is_sra ?
+                         { {32{$src1_value[31]}}, $src1_value} >> $src2_value[4:0] :
+                         32'bx;
+         
+         $sltu_rslt[31:0]  = $src1_value[31:0] < $src2_value[31:0];
+         $sltiu_rslt[31:0] = $src1_value[31:0] < $imm;
+```
 
-
+![ALU makerchip](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/32f69060-402f-4072-8faf-56cb340204c6)
 
 
 </details>
 
 
+<details>
+  <summary>Register File Write :- </summary>
+
+- Register File Write is a stage in a pipelined CPU architecture where the results of an instruction's execution are written back to the processor's register file
+-  This is where the general-purpose registers (GPRs) are stored. RISC-V typically has a small number of registers, often 32, which can be used for storing data and addresses.
+![Register File Write](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/94be137d-452c-476d-8bbf-fc48b8daeced)
 
 
+```
+         //Register File Write - Considering three cases
+         // Will be enabled only when Valid Bit which is helping us construct pipeline is high
+         // along with it destination register needs to be valid and destination register cannot
+         // be zero as it will be treated as X0 by RISCV ISA standards. 
+         $rf_wr_en = ($valid && $rd_valid && $rd != 5'b0) || >>2$valid_load;
+         $rf_wr_index[4:0] = >>2$valid_load ? >>2$rd : $rd;
+         $rf_wr_data[31:0] = >>2$valid_load ? >>2$ld_data : $result;
+```
+
+![Register File Write makerchip](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/7350b73f-a525-487f-9dbc-51e824ec5fff)
+
+</details>
+
+<details>
+  <summary>Branches :- </summary>
+
+![Branches ](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/2372040a-586c-40ff-a50f-19222dbcd3f7)
+
+```
+         //Branch Target for Immediate Instruction PC increment
+         $br_tgt_pc[31:0] = $pc + $imm;
+         
+         //Jump Target for Immediate Instruction PC increment
+         $jalr_tgt_pc[31:0] = $src1_value + $imm;
+         
+      @3   
+         //BRANCHING Instructions 
+         $taken_br = $is_beq ? ($src1_value == $src2_value) :
+                     $is_bne ?($src1_value != $src2_value) :
+                     $is_bltu ? ($src1_value <  $src2_value) :
+                     $is_bgeu ? ($src1_value >= $src2_value) :
+                     $is_blt ? (($src1_value < $src2_value) ^ ($src1_value[31] != $src2_value[31])) :
+                     $is_bgeu ? (($src1_value >= $src2_value) ^ ($src1_value[31] != $src2_value[31])) :
+                            1'b0;
+         
+         //BRANCHING PROBLEM SOLUTION FOR READ AFTER WRITE CADENCE 
+         // In the case of read after write with a branch condition in next cycle
+         // The valid bit here will help increment the PC every cycle instead of every 3 cycles.
+         $valid = !(>>1$valid_taken_br || >>2$valid_taken_br || >>1$valid_load || >>2$valid_load); 
+         
+         //Valid Signal for branching which feeds into PC so that during pipeline unnecesarily PC doesn't
+         //Increment for INVALID CYCLES. 
+         $valid_taken_br = $valid && $taken_br;
+```
+
+![Branches makerchip](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/d6d4d139-aa91-4ce8-84f2-e523afe454ec)
+
+</details>
 
 
 
