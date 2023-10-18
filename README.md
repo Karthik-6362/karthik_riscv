@@ -882,11 +882,86 @@ Simulation PASSED!!!
 ![Simulation PASSED!!!](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/e87f282f-0304-4806-b50a-ae6c3b9298a5)
 
  
+</details>
 
+</details>
+
+
+<details>
+  <summary>Day 5 - Complete Pipelined RISC-V CPU micro-architecture :- </summary>
+
+- Converting non-piepleined CPU to pipelined CPU using timing abstract feature of TL-Verilog.
+- "waterfall logic" in pipelining means a sequential and straightforward processing of instructions in a pipeline, with each stage completing its work before passing it to the next stage.
+- In a waterfall pipeline, an instruction moves from one stage to the next only when the preceding stage has fully completed its processing.
+- This approach ensures that the order of execution of instructions is maintained, and there is no overlap or concurrent execution between different stages of the pipeline.
+
+![Waterfall Logic Diagram](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/ad4c7aad-3e13-4afb-8053-286d493dd608)
+
+- Converting non-piepleined CPU to pipelined CPU using timing abstract feature of TL-Verilog. 
+
+Similar to branch, load will also have 3 cycle delay. So, added a Data Memory 1 write/read memory.
+
+Inputs:
+
+Read_Enable - Enable signal to perform read operation
+Write_Enable - Enable signal to perform write operation
+Address - Address specified whether to read/write from
+Write_Data - Data to be written on Address (Store Instruction)
+Output:
+
+Read_Data - Data to be read from Address (Load Instruction)
+Added test case to check fucntionality of load/store. Stored the summation of 1 to 9 on address 4 of Data Memory and loaded that value from Data Memory to r17.
+
+Waterfall Diagram & Hazards :- 
+
+![Waterfall Diagram   Hazards 2](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/39f52acf-0a4c-4ba5-b37e-4c725fc2b891)
+
+![Waterfall Diagram   Hazards 1](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/8811031a-9fed-4692-b7f0-ab9d18c14494)
+
+ Solution :- Pipelining it every 3 cycles 
+ ![Waterfall Diagram   Hazards solution](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/1fc776c1-106f-4585-8be0-1f00ce9a09f7)
+
+
+
+
+Pipelining the CPU
+The above single stage Core was enhanced to be staged across 3 stages in a pipeline, Final output where the core is computing Sum of 9 number. Converting non-pipelined CPU to pipelined CPU using timing abstract feature of TL-Verilog. This allows easy retiming wihtout any risk of funcational bugs. More details reagrding Timing Abstract in TL-Verilog can be found in IEEE Paper "Timing-Abstract Circuit Design in Transaction-Level Verilog" by Steven Hoover.
+
+```
+|<pipe-name>
+   @<pipe stage>
+      Instructions present in this stage
+      
+   @<pipe_stage>
+      Instructions present in this stage
+
+
+*passed = |cpu/xreg[17]>>5$value == (1+2+3+4+5+6+7+8+9);
+```
+
+  
+  
+  
 </details>
 
 
 
 
-</details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
