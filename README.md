@@ -891,6 +891,8 @@ Simulation PASSED!!!
   <summary>Day 5 - Complete Pipelined RISC-V CPU micro-architecture :- </summary>
 
 - Converting non-piepleined CPU to pipelined CPU using timing abstract feature of TL-Verilog.
+<details>
+  <summary>Waterfall Diagram & Hazards :-  </summary>
 - "waterfall logic" in pipelining means a sequential and straightforward processing of instructions in a pipeline, with each stage completing its work before passing it to the next stage.
 - In a waterfall pipeline, an instruction moves from one stage to the next only when the preceding stage has fully completed its processing.
 - This approach ensures that the order of execution of instructions is maintained, and there is no overlap or concurrent execution between different stages of the pipeline.
@@ -898,19 +900,6 @@ Simulation PASSED!!!
 ![Waterfall Logic Diagram](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/ad4c7aad-3e13-4afb-8053-286d493dd608)
 
 - Converting non-piepleined CPU to pipelined CPU using timing abstract feature of TL-Verilog. 
-
-Similar to branch, load will also have 3 cycle delay. So, added a Data Memory 1 write/read memory.
-
-Inputs:
-
-Read_Enable - Enable signal to perform read operation
-Write_Enable - Enable signal to perform write operation
-Address - Address specified whether to read/write from
-Write_Data - Data to be written on Address (Store Instruction)
-Output:
-
-Read_Data - Data to be read from Address (Load Instruction)
-Added test case to check fucntionality of load/store. Stored the summation of 1 to 9 on address 4 of Data Memory and loaded that value from Data Memory to r17.
 
 Waterfall Diagram & Hazards :- 
 
@@ -921,7 +910,7 @@ Waterfall Diagram & Hazards :-
  Solution :- Pipelining it every 3 cycles 
  ![Waterfall Diagram   Hazards solution](https://github.com/Karthik-6362/karthik_riscv/assets/137412032/1fc776c1-106f-4585-8be0-1f00ce9a09f7)
 
-
+</details>
 
 
 Pipelining the CPU
